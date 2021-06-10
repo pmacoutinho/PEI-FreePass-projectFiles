@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="Counter_editText" type="id" />
+    <item name="Counter_textView" type="id" />
+    <item name="NumbercheckBox" type="id" />
+    <item name="AZCAPS_checkBox" type="id" />
+    <item name="Options_textView" type="id" />
+    <item name="SymbolcheckBox" type="id" />
+    <item name="az_checkBox" type="id" />
+    <item name="username_editText" type="id" />
+    <item name="Username_textView" type="id" />
+    <item name="Password_textView" type="id" />
+    <item name="Username_editText" type="id" />
+    <item name="AnonymousMode_textView" type="id" />
+    <item name="WebsiteURL_editText" type="id" />
+    <item name="WebsiteURL_textView" type="id" />
+    <item name="Password_editText" type="id" />
+    <item name="Length_editText" type="id" />
+    <item name="Length_seekBar" type="id" />
+    <item name="textView6" type="id" />
+</resources>

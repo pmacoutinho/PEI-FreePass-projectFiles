@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Info"
+    tools:ignore="HardcodedText"
+    android:background="#36393f">
+
+    <TextView
+        android:id="@+id/Information_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Information"
+        android:textColor="@color/white"
+        android:textSize="19sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.053"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
+
+    <ImageView
+        android:id="@+id/BackArrow_imageView"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:contentDescription="back arrow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.709"
+        app:layout_constraintStart_toEndOf="@+id/Information_textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.021"
+        app:srcCompat="@drawable/back_arrow_icon" />
+
+    <ImageView
+        android:id="@+id/Home_imageView"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:contentDescription="home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.876"
+        app:layout_constraintStart_toEndOf="@+id/Information_textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022"
+        app:srcCompat="@drawable/home_icon" />
+
+    <TextView
+        android:id="@+id/WebsiteURL_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Website URL"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Information_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Information_textView"
+        app:layout_constraintVertical_bias="0.025" />
+
+    <TextView
+        android:id="@+id/WebsiteURLInfo_textView"
+        android:layout_width="362dp"
+        android:layout_height="74dp"
+        android:text="The URL of the website your account is on.
+We recommend that you keep the formatting consistent across all
+your passwords, for example always removing the 'https://' but
+keeping the '.com'."
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/WebsiteURL_textView"
+        app:layout_constraintTop_toBottomOf="@+id/WebsiteURL_textView"
+        app:layout_constraintVertical_bias="0.015" />
+
+    <TextView
+        android:id="@+id/Username_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/WebsiteURLInfo_textView"
+        app:layout_constraintTop_toBottomOf="@+id/WebsiteURLInfo_textView"
+        app:layout_constraintVertical_bias="0.016" />
+
+    <TextView
+        android:id="@+id/UsernameInfo_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The username of the account you're using."
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Username_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Username_textView"
+        app:layout_constraintVertical_bias="0.013" />
+
+    <TextView
+        android:id="@+id/MasterPassword_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Master Password"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/UsernameInfo_textView"
+        app:layout_constraintTop_toBottomOf="@+id/UsernameInfo_textView"
+        app:layout_constraintVertical_bias="0.028" />
+
+    <TextView
+        android:id="@+id/MasterPasswordInfo_textView"
+        android:layout_width="364dp"
+        android:layout_height="90dp"
+        android:text="Consider this your freePass password, you can use it
+to generate all your passwords, however if you want to be as safe as possible
+you should use multiple passwords. Try using a different password for different
+website types (shopping, financial, etc)."
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/MasterPassword_textView"
+        app:layout_constraintTop_toBottomOf="@+id/MasterPassword_textView"
+        app:layout_constraintVertical_bias="0.019" />
+
+    <TextView
+        android:id="@+id/Checkbox_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Checkbox Options"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/MasterPasswordInfo_textView"
+        app:layout_constraintTop_toBottomOf="@+id/MasterPasswordInfo_textView"
+        app:layout_constraintVertical_bias="0.027" />
+
+    <TextView
+        android:id="@+id/CheckboxInfo_textView"
+        android:layout_width="362dp"
+        android:layout_height="50dp"
+        android:text="You can choose to include/exclude certain characters from
+your password including lowercase, uppercase, numbers and symbols."
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Checkbox_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Checkbox_textView"
+        app:layout_constraintVertical_bias="0.029" />
+
+    <TextView
+        android:id="@+id/Length_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Length"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/CheckboxInfo_textView"
+        app:layout_constraintTop_toBottomOf="@+id/CheckboxInfo_textView"
+        app:layout_constraintVertical_bias="0.046" />
+
+    <TextView
+        android:id="@+id/LengthInfo_textView"
+        android:layout_width="362dp"
+        android:layout_height="34dp"
+        android:text="The number of characters your generated
+password will have."
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Length_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Length_textView"
+        app:layout_constraintVertical_bias="0.028" />
+
+    <TextView
+        android:id="@+id/Counter_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Counter"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/LengthInfo_textView"
+        app:layout_constraintTop_toBottomOf="@+id/LengthInfo_textView"
+        app:layout_constraintVertical_bias="0.059" />
+
+    <TextView
+        android:id="@+id/CounterInfo_textView"
+        android:layout_width="364dp"
+        android:layout_height="67dp"
+        android:text="The counter exists to allow you to change your password.
+It starts at 1 by default, if you want to get a new password with the same login
+details you should increase the counter by one."
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Counter_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Counter_textView"
+        app:layout_constraintVertical_bias="0.042" />
+
+    <TextView
+        android:id="@+id/Workbench_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Workbench"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/CounterInfo_textView"
+        app:layout_constraintTop_toBottomOf="@+id/CounterInfo_textView"
+        app:layout_constraintVertical_bias="0.107" />
+
+    <TextView
+        android:id="@+id/WorkbenchInfo_textView"
+        android:layout_width="363dp"
+        android:layout_height="67dp"
+        android:text="You can take advantage of the workbench to beef up password security.
+To use it you should copy paste a long and easy to find text, like the first
+paragraph of a royalty free book."
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Workbench_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Workbench_textView"
+        app:layout_constraintVertical_bias="0.333" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

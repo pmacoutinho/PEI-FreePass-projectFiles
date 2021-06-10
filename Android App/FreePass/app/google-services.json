@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "135297074052",
+    "project_id": "freepass-e2404",
+    "storage_bucket": "freepass-e2404.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:135297074052:android:d2b61ad8155ae6afe353d1",
+        "android_client_info": {
+          "package_name": "com.example.freepass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "135297074052-i8rua9vars0emjrsrkcn7uspmprb54i0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDMPs07FOIr5prGBm3Gnx2hDonzmX2r64"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "135297074052-i8rua9vars0emjrsrkcn7uspmprb54i0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
