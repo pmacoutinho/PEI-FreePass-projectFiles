@@ -3,14 +3,15 @@ package com.example.freepass;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,12 +31,29 @@ public class Settings extends AppCompatActivity {
 
         ImageView home_imageView = findViewById(R.id.Home_imageView);
         ImageView backArrow_imageView = findViewById(R.id.BackArrow_imageView);
+        EditText username_editText = findViewById(R.id.Username_editText);
+        CheckBox lowerCase_checkBox = findViewById(R.id.LowerCase_checkBox);
+        CheckBox upperCase_checkBox = findViewById(R.id.UpperCase_checkBox);
+        CheckBox number_checkBox = findViewById(R.id.Number_checkBox);
+        CheckBox symbol_checkBox = findViewById(R.id.Symbol_checkBox);
+        EditText length_editText = findViewById(R.id.Length_editText);
+        EditText counter_editText = findViewById(R.id.Counter_editText);
+        Button save_button = findViewById(R.id.Save_button);
         TextView loggedInAs_textView = findViewById(R.id.LoggedInAs_textView);
         Button logout_button = findViewById(R.id.Logout_button);
         Button deleteAccount_button = findViewById(R.id.DeleteAccount_button);
         TextView notLogged_textView = findViewById(R.id.NotLogged_textView);
         Button login_button = findViewById(R.id.Login_button);
         Button register_button = findViewById(R.id.Register_button);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
+        username_editText.setText(sharedPreferences.getString("username_default", ""));
+        lowerCase_checkBox.setChecked(sharedPreferences.getBoolean("lowercase_default", true));
+        upperCase_checkBox.setChecked(sharedPreferences.getBoolean("uppercase_default", true));
+        number_checkBox.setChecked(sharedPreferences.getBoolean("number_default", true));
+        symbol_checkBox.setChecked(sharedPreferences.getBoolean("symbol_default", true));
+        length_editText.setText(sharedPreferences.getString("length_default", "16"));
+        counter_editText.setText(sharedPreferences.getString("counter_default", "1"));
 
         //Hides the action bar (bar on top)
         Objects.requireNonNull(getSupportActionBar()).hide();
@@ -47,7 +65,8 @@ public class Settings extends AppCompatActivity {
             notLogged_textView.setVisibility(View.GONE);
             login_button.setVisibility(View.GONE);
             register_button.setVisibility(View.GONE);
-            loggedInAs_textView.setText(String.format("Logged in as: %s", Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail()));
+            loggedInAs_textView.setText(String.format("Logged in as: %s",
+                    Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail()));
         } else {
             loggedInAs_textView.setVisibility(View.GONE);
             logout_button.setVisibility(View.GONE);
@@ -68,6 +87,19 @@ public class Settings extends AppCompatActivity {
                 startActivity(new Intent(this, AccountMode.class));
             else
                 startActivity(new Intent(this, AnonymousMode.class));
+        });
+
+        save_button.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("username_default", username_editText.getText().toString());
+            editor.putBoolean("lowercase_default", lowerCase_checkBox.isChecked());
+            editor.putBoolean("uppercase_default", upperCase_checkBox.isChecked());
+            editor.putBoolean("number_default", number_checkBox.isChecked());
+            editor.putBoolean("symbol_default", symbol_checkBox.isChecked());
+            editor.putString("length_default", length_editText.getText().toString());
+            editor.putString("counter_default", counter_editText.getText().toString());
+            editor.apply();
+            Toast.makeText(this, "Defaults saved", Toast.LENGTH_SHORT).show();
         });
 
         logout_button.setOnClickListener(v -> {

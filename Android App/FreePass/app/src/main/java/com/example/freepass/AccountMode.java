@@ -1,6 +1,5 @@
 package com.example.freepass;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
@@ -25,20 +24,16 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -49,7 +44,9 @@ import java.util.Map;
 import java.util.Objects;
 
     //TODO: [MEDIUM PRIORITY] CHANGE TEXT COLOR IN SIMPLE_LIST_1
-    //TODO: [MEDIUM PRIORITY] CHANGE PASSWORD
+    //TODO: [MEDIUM PRIORITY] ENCRYPT WEBSITE_URL AND USERNAME
+    //TODO: [LOW PRIORITY] CHANGE CHECKBOX COLOR WHEN NONE OF THEM IS CHECKED AND WHEN THEY'RE CHECKED
+    //TODO: [LOW PRIORITY] MAYBE VERIFY IF LENGTH AND COUNTER ARE INVALID *BEFORE* PRESSING THE GENERATE BUTTON
 
 public class AccountMode extends AppCompatActivity {
 
@@ -72,13 +69,11 @@ public class AccountMode extends AppCompatActivity {
         CollectionReference collectionReference = firebaseStore.collection(userID);
         collectionReference.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
+                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult()))
                     savedWebsiteURL.add(document.getId());
-                }
                 Log.d("Saved website list", "Saved website list retrieved successfully: " + savedWebsiteURL.toString());
-            } else {
-                Log.d("Saved website list", "Error:: ", task.getException());
-            }
+            } else
+                Log.d("Saved website list", "Error: ", task.getException());
         });
 
         ImageView settings_imageView = findViewById(R.id.Settings_imageView);
@@ -109,6 +104,15 @@ public class AccountMode extends AppCompatActivity {
         ImageView save_imageView = findViewById(R.id.Save_imageView);
         TextView save_textView = findViewById(R.id.Save_textView);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
+        username_editText.setText(sharedPreferences.getString("username_default", ""));
+        lowerCase_checkBox.setChecked(sharedPreferences.getBoolean("lowercase_default", true));
+        upperCase_checkBox.setChecked(sharedPreferences.getBoolean("uppercase_default", true));
+        number_checkBox.setChecked(sharedPreferences.getBoolean("number_default", true));
+        symbol_checkBox.setChecked(sharedPreferences.getBoolean("symbol_default", true));
+        length_editText.setText(sharedPreferences.getString("length_default", "16"));
+        counter_editText.setText(sharedPreferences.getString("counter_default", "1"));
+
         //Settings button
         settings_imageView.setOnClickListener(v -> {
             Intent intent = new Intent(this, Settings.class);
@@ -118,9 +122,11 @@ public class AccountMode extends AppCompatActivity {
         });
 
         //Info button
-        info_imageView.setOnClickListener(v ->
-                startActivity(new Intent(this, Info.class))
-        );
+        info_imageView.setOnClickListener(v -> {
+            Intent intent = new Intent(this, Info.class);
+            intent.putExtra("mode", "account");
+            startActivity(intent);
+        });
 
         //Home button
         home_imageView.setOnClickListener(v ->
@@ -133,15 +139,30 @@ public class AccountMode extends AppCompatActivity {
         resetTextChange(length_editText);
         resetTextChange(counter_editText);
 
-        lowerCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
-        upperCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
-        number_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
-        symbol_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
+        lowerCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
+        upperCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
+        number_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
+        symbol_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
 
         //Dropdown menu for websiteURL
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, savedWebsiteURL);
         websiteURL_editText.setAdapter(adapter);
+
+        //Fill fields if user clicks on the websiteURL_editText suggestion
+        websiteURL_editText.setOnItemClickListener((p, v, pos, id) -> {
+            DocumentReference documentReference = firebaseStore.collection(userID).document(p.getItemAtPosition(pos).toString());
+            documentReference.addSnapshotListener(this, (documentSnapshot, error) -> {
+                assert documentSnapshot != null;
+                username_editText.setText(documentSnapshot.getString("username"));
+                lowerCase_checkBox.setChecked(Objects.requireNonNull(documentSnapshot.getBoolean("lowercase")).equals(true));
+                upperCase_checkBox.setChecked(Objects.requireNonNull(documentSnapshot.getBoolean("uppercase")).equals(true));
+                number_checkBox.setChecked(Objects.requireNonNull(documentSnapshot.getBoolean("number")).equals(true));
+                symbol_checkBox.setChecked(Objects.requireNonNull(documentSnapshot.getBoolean("symbol")).equals(true));
+                length_editText.setText(documentSnapshot.getString("length"));
+                counter_editText.setText(documentSnapshot.getString("counter"));
+            });
+        });
 
         //Add workbench button
         //IMPORTANT: Workbench should always be trimmed for consistency's sake
@@ -156,9 +177,12 @@ public class AccountMode extends AppCompatActivity {
             builder.setView(workbench_layout);
 
             builder.setPositiveButton("Add", (dialog, id) -> {
-                saveWorkbench(workbench_editText.getText().toString().trim());
-                Toast.makeText(getApplicationContext(), "Workbench added successfully", Toast.LENGTH_SHORT).show();
-                resetPasswordGeneration();
+                if (workbench_editText.getText().toString().length() <= 10000) {
+                    saveWorkbench(workbench_editText.getText().toString().trim());
+                    Toast.makeText(getApplicationContext(), "Workbench added successfully", Toast.LENGTH_SHORT).show();
+                    resetPasswordGeneration();
+                } else
+                    Toast.makeText(getApplicationContext(), "Character limit is 10.000", Toast.LENGTH_SHORT).show();
             });
 
             builder.setNegativeButton("Cancel", (dialog, id) -> {});

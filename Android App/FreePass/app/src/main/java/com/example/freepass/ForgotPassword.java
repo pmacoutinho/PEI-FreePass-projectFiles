@@ -34,10 +34,16 @@ public class ForgotPassword extends AppCompatActivity {
         //Hides the action bar (bar on top)
         Objects.requireNonNull(getSupportActionBar()).hide();
 
+        ImageView backArrow_imageView = findViewById(R.id.BackArrow_imageView);
         ImageView home_imageView = findViewById(R.id.Home_imageView);
         TextView email_textView = findViewById((R.id.Email_textView));
         EditText email_editText = findViewById(R.id.Email_editText);
         Button sendEmail_button = findViewById(R.id.SendEmail_button);
+
+        //Back arrow button
+        backArrow_imageView.setOnClickListener(v ->
+                startActivity(new Intent(this, Login.class))
+        );
 
         //Home button
         home_imageView.setOnClickListener(v ->

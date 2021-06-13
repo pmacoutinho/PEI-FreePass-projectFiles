@@ -64,19 +64,18 @@
 
     <TextView
         android:id="@+id/WebsiteURLInfo_textView"
-        android:layout_width="362dp"
-        android:layout_height="74dp"
-        android:text="The URL of the website your account is on.
+        android:layout_width="360dp"
+        android:layout_height="51dp"
+        android:text="The domain of the website your account is on.
 We recommend that you keep the formatting consistent across all
-your passwords, for example always removing the 'https://' but
-keeping the '.com'."
+your passwords."
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/WebsiteURL_textView"
         app:layout_constraintTop_toBottomOf="@+id/WebsiteURL_textView"
-        app:layout_constraintVertical_bias="0.015" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/Username_textView"
@@ -103,7 +102,7 @@ keeping the '.com'."
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/Username_textView"
         app:layout_constraintTop_toBottomOf="@+id/Username_textView"
-        app:layout_constraintVertical_bias="0.013" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/MasterPassword_textView"
@@ -117,7 +116,7 @@ keeping the '.com'."
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/UsernameInfo_textView"
         app:layout_constraintTop_toBottomOf="@+id/UsernameInfo_textView"
-        app:layout_constraintVertical_bias="0.028" />
+        app:layout_constraintVertical_bias="0.016" />
 
     <TextView
         android:id="@+id/MasterPasswordInfo_textView"
@@ -133,7 +132,7 @@ website types (shopping, financial, etc)."
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/MasterPassword_textView"
         app:layout_constraintTop_toBottomOf="@+id/MasterPassword_textView"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/Checkbox_textView"
@@ -147,21 +146,21 @@ website types (shopping, financial, etc)."
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/MasterPasswordInfo_textView"
         app:layout_constraintTop_toBottomOf="@+id/MasterPasswordInfo_textView"
-        app:layout_constraintVertical_bias="0.027" />
+        app:layout_constraintVertical_bias="0.026" />
 
     <TextView
         android:id="@+id/CheckboxInfo_textView"
-        android:layout_width="362dp"
-        android:layout_height="50dp"
+        android:layout_width="363dp"
+        android:layout_height="35dp"
         android:text="You can choose to include/exclude certain characters from
-your password including lowercase, uppercase, numbers and symbols."
+your password."
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/Checkbox_textView"
         app:layout_constraintTop_toBottomOf="@+id/Checkbox_textView"
-        app:layout_constraintVertical_bias="0.029" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/Length_textView"
@@ -175,7 +174,7 @@ your password including lowercase, uppercase, numbers and symbols."
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/CheckboxInfo_textView"
         app:layout_constraintTop_toBottomOf="@+id/CheckboxInfo_textView"
-        app:layout_constraintVertical_bias="0.046" />
+        app:layout_constraintVertical_bias="0.025" />
 
     <TextView
         android:id="@+id/LengthInfo_textView"
@@ -189,7 +188,7 @@ password will have."
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/Length_textView"
         app:layout_constraintTop_toBottomOf="@+id/Length_textView"
-        app:layout_constraintVertical_bias="0.028" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/Counter_textView"
@@ -203,7 +202,7 @@ password will have."
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/LengthInfo_textView"
         app:layout_constraintTop_toBottomOf="@+id/LengthInfo_textView"
-        app:layout_constraintVertical_bias="0.059" />
+        app:layout_constraintVertical_bias="0.034" />
 
     <TextView
         android:id="@+id/CounterInfo_textView"
@@ -218,7 +217,7 @@ details you should increase the counter by one."
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/Counter_textView"
         app:layout_constraintTop_toBottomOf="@+id/Counter_textView"
-        app:layout_constraintVertical_bias="0.042" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/Workbench_textView"
@@ -232,7 +231,7 @@ details you should increase the counter by one."
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/CounterInfo_textView"
         app:layout_constraintTop_toBottomOf="@+id/CounterInfo_textView"
-        app:layout_constraintVertical_bias="0.107" />
+        app:layout_constraintVertical_bias="0.061" />
 
     <TextView
         android:id="@+id/WorkbenchInfo_textView"
@@ -247,6 +246,37 @@ paragraph of a royalty free book."
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/Workbench_textView"
         app:layout_constraintTop_toBottomOf="@+id/Workbench_textView"
-        app:layout_constraintVertical_bias="0.333" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/Save_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/WorkbenchInfo_textView"
+        app:layout_constraintVertical_bias="0.104" />
+
+    <TextView
+        android:id="@+id/SaveInfo_textView"
+        android:layout_width="363dp"
+        android:layout_height="52dp"
+        android:text="Save the website URL; your username; checkbox options;
+password length and password counter. Keep in mind the master password and
+workbench are not saved."
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Save_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Save_textView"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

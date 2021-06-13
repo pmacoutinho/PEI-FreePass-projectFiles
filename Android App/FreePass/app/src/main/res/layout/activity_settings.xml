@@ -65,7 +65,7 @@
         app:layout_constraintVertical_bias="0.028" />
 
     <EditText
-        android:id="@+id/username_editText"
+        android:id="@+id/Username_editText"
         android:layout_width="370dp"
         android:layout_height="47dp"
         android:ems="10"
@@ -92,11 +92,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/Settings_textView"
-        app:layout_constraintTop_toBottomOf="@+id/username_editText"
+        app:layout_constraintTop_toBottomOf="@+id/Username_editText"
         app:layout_constraintVertical_bias="0.03" />
 
     <CheckBox
-        android:id="@+id/lowerCase_checkBox"
+        android:id="@+id/LowerCase_checkBox"
         android:layout_width="98dp"
         android:layout_height="52dp"
         android:checked="true"
@@ -111,7 +111,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
-        android:id="@+id/upperCase_checkBox"
+        android:id="@+id/UpperCase_checkBox"
         android:layout_width="98dp"
         android:layout_height="52dp"
         android:checked="true"
@@ -121,12 +121,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/lowerCase_checkBox"
+        app:layout_constraintStart_toEndOf="@+id/LowerCase_checkBox"
         app:layout_constraintTop_toBottomOf="@+id/DefaultOptions_textView"
         app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
-        android:id="@+id/number_checkBox"
+        android:id="@+id/Number_checkBox"
         android:layout_width="98dp"
         android:layout_height="52dp"
         android:checked="true"
@@ -136,12 +136,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/upperCase_checkBox"
+        app:layout_constraintStart_toEndOf="@+id/UpperCase_checkBox"
         app:layout_constraintTop_toBottomOf="@+id/DefaultOptions_textView"
         app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
-        android:id="@+id/symbol_checkBox"
+        android:id="@+id/Symbol_checkBox"
         android:layout_width="98dp"
         android:layout_height="52dp"
         android:checked="true"
@@ -151,7 +151,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/number_checkBox"
+        app:layout_constraintStart_toEndOf="@+id/Number_checkBox"
         app:layout_constraintTop_toBottomOf="@+id/DefaultOptions_textView"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -164,12 +164,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/lowerCase_checkBox"
-        app:layout_constraintTop_toBottomOf="@+id/lowerCase_checkBox"
+        app:layout_constraintStart_toStartOf="@+id/LowerCase_checkBox"
+        app:layout_constraintTop_toBottomOf="@+id/LowerCase_checkBox"
         app:layout_constraintVertical_bias="0.024" />
 
     <EditText
-        android:id="@+id/length_editText"
+        android:id="@+id/Length_editText"
         android:layout_width="75dp"
         android:layout_height="47dp"
         android:ems="10"
@@ -199,7 +199,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/counter_editText"
+        android:id="@+id/Counter_editText"
         android:layout_width="75dp"
         android:layout_height="47dp"
         android:ems="10"
@@ -224,10 +224,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.005"
-        app:layout_constraintStart_toStartOf="@+id/length_editText"
-        app:layout_constraintTop_toBottomOf="@+id/length_editText"
-        app:layout_constraintVertical_bias="0.045" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Save_button"
+        app:layout_constraintTop_toBottomOf="@+id/Save_button"
+        app:layout_constraintVertical_bias="0.092" />
 
     <TextView
         android:id="@+id/LoggedInAs_textView"
@@ -257,21 +257,22 @@
         app:layout_constraintStart_toStartOf="@+id/LoggedInAs_textView"
         app:layout_constraintTop_toBottomOf="@+id/LoggedInAs_textView"
         app:layout_constraintVertical_bias="0.052" />
+
+
     <Button
         android:id="@+id/DeleteAccount_button"
         android:layout_width="170dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="236dp"
         android:text="Delete Account"
+        android:visibility="gone"
         android:textColor="@android:color/black"
         app:backgroundTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.21"
+        app:layout_constraintHorizontal_bias="0.148"
         app:layout_constraintStart_toEndOf="@+id/Logout_button"
-        app:layout_constraintTop_toBottomOf="@+id/Account_textView"
-        app:layout_constraintVertical_bias="0.25" />
-
+        app:layout_constraintTop_toTopOf="@+id/Logout_button"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/NotLogged_textView"
@@ -316,5 +317,19 @@
         app:layout_constraintStart_toStartOf="@+id/NotLogged_textView"
         app:layout_constraintTop_toTopOf="@+id/Login_button"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/Save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="Save"
+        android:textColor="@android:color/black"
+        app:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Length_editText"
+        app:layout_constraintTop_toBottomOf="@+id/Length_editText"
+        app:layout_constraintVertical_bias="0.066" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

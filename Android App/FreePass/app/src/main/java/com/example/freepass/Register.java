@@ -26,8 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
-        //TODO: [LOW PRIORITY] SEND VERIFICATION EMAIL
-        //TODO: [LOW PRIORITY] ADD MORE PASSWORD REQUIREMENTS
+    //TODO: [LOW PRIORITY] SEND VERIFICATION EMAIL
 
 public class Register extends AppCompatActivity {
 

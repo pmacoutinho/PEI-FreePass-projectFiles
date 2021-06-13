@@ -7,7 +7,6 @@ import androidx.core.view.ViewCompat;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -16,11 +15,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,11 +33,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Objects;
 
-    //TODO: [MEDIUM PRIORITY] WORKBENCH CHARACTER LIMIT
     //TODO: [LOW PRIORITY] CHANGE CHECKBOX COLOR WHEN NONE OF THEM IS CHECKED AND WHEN THEY'RE CHECKED
     //TODO: [LOW PRIORITY] MAYBE VERIFY IF LENGTH AND COUNTER ARE INVALID *BEFORE* PRESSING THE GENERATE BUTTON
-    //TODO: [LOW PRIORITY] MAKE APP COMPATIBLE WITH ALL SCREEN SIZES
-    //TODO: [LOW PRIORITY] FIX WARNINGS
 
 public class AnonymousMode extends AppCompatActivity {
 
@@ -81,6 +75,15 @@ public class AnonymousMode extends AppCompatActivity {
         ImageView reset_imageView = findViewById(R.id.Reset_imageView);
         TextView reset_textView = findViewById(R.id.Reset_textView);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
+        username_editText.setText(sharedPreferences.getString("username_default", ""));
+        lowerCase_checkBox.setChecked(sharedPreferences.getBoolean("lowercase_default", true));
+        upperCase_checkBox.setChecked(sharedPreferences.getBoolean("uppercase_default", true));
+        number_checkBox.setChecked(sharedPreferences.getBoolean("number_default", true));
+        symbol_checkBox.setChecked(sharedPreferences.getBoolean("symbol_default", true));
+        length_editText.setText(sharedPreferences.getString("length_default", "16"));
+        counter_editText.setText(sharedPreferences.getString("counter_default", "1"));
+
         //Settings button
         settings_imageView.setOnClickListener(v -> {
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -96,9 +99,11 @@ public class AnonymousMode extends AppCompatActivity {
         });
 
         //Info button
-        info_imageView.setOnClickListener(v ->
-                startActivity(new Intent(this, Info.class))
-        );
+        info_imageView.setOnClickListener(v ->{
+            Intent intent = new Intent(this, Info.class);
+            intent.putExtra("mode", "anonymous");
+            startActivity(intent);
+        });
 
         //Home button
         home_imageView.setOnClickListener(v ->
@@ -111,10 +116,10 @@ public class AnonymousMode extends AppCompatActivity {
         resetTextChange(length_editText);
         resetTextChange(counter_editText);
 
-        lowerCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
-        upperCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
-        number_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
-        symbol_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
+        lowerCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
+        upperCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
+        number_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
+        symbol_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
 
         //Add workbench button
         workbench_button.setOnClickListener(v -> {
@@ -123,12 +128,14 @@ public class AnonymousMode extends AppCompatActivity {
             EditText workbench_editText = workbench_layout.findViewById(R.id.Workbench_editText);
 
             builder.setView(workbench_layout);
-            //builder.setTitle("Add Workbench");
 
             builder.setPositiveButton("Add", (dialog, id) -> {
-                saveWorkbench(workbench_editText.getText().toString().trim());
-                Toast.makeText(getApplicationContext(), "Workbench added successfully", Toast.LENGTH_SHORT).show();
-                resetPasswordGeneration();
+                if (workbench_editText.getText().toString().length() <= 10000) {
+                    saveWorkbench(workbench_editText.getText().toString().trim());
+                    Toast.makeText(getApplicationContext(), "Workbench added successfully", Toast.LENGTH_SHORT).show();
+                    resetPasswordGeneration();
+                } else
+                    Toast.makeText(getApplicationContext(), "Character limit is 10.000", Toast.LENGTH_SHORT).show();
             });
 
             builder.setNegativeButton("Cancel", (dialog, id) -> {});

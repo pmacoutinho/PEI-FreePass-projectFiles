@@ -119,10 +119,10 @@ public class Login extends AppCompatActivity {
         ProgressBar progressBar = findViewById(R.id.progressBar);
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(Login.this, "Welcome!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Welcome!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), AccountMode.class));
             } else
-                Toast.makeText(Login.this, "Error: " + Objects.requireNonNull(task.getException()).getMessage(),
+                Toast.makeText(this, "Error: " + Objects.requireNonNull(task.getException()).getMessage(),
                         Toast.LENGTH_SHORT).show();
 
             progressBar.setVisibility(View.GONE);
