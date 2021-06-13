@@ -1,11 +1,16 @@
 package com.example.freepass;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -86,6 +91,15 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Fill the required fields", Toast.LENGTH_SHORT).show();
             else {
                 progressBar.setVisibility(View.VISIBLE);
+                //Changing progressBar color is different for pre-lollipop android versions
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    Drawable drawableProgress = DrawableCompat.wrap(progressBar.getIndeterminateDrawable());
+                    DrawableCompat.setTint(drawableProgress, ContextCompat.getColor(this, android.R.color.white));
+                    progressBar.setIndeterminateDrawable(DrawableCompat.unwrap(drawableProgress));
+
+                } else
+                    progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, android.R.color.white), PorterDuff.Mode.SRC_IN);
+
                 login(email, password);
             }
         });

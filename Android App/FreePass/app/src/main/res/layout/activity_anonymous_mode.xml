@@ -32,7 +32,8 @@
         app:layout_constraintStart_toEndOf="@+id/AnonymousMode_textView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.021"
-        app:srcCompat="@drawable/settings_icon" />
+        app:srcCompat="@drawable/settings_icon"
+        android:contentDescription="settings" />
 
     <ImageView
         android:id="@+id/Info_imageView"
@@ -44,7 +45,8 @@
         app:layout_constraintStart_toEndOf="@+id/AnonymousMode_textView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.022"
-        app:srcCompat="@drawable/info_icon" />
+        app:srcCompat="@drawable/info_icon"
+        android:contentDescription="info" />
 
     <ImageView
         android:id="@+id/Home_imageView"
@@ -162,10 +164,10 @@
         android:id="@+id/LowerCase_checkBox"
         android:layout_width="98dp"
         android:layout_height="52dp"
-        android:buttonTint="@color/white"
         android:checked="true"
         android:text="a-z"
         android:textColor="@color/white"
+        app:buttonTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
@@ -177,10 +179,10 @@
         android:id="@+id/UpperCase_checkBox"
         android:layout_width="98dp"
         android:layout_height="52dp"
-        android:buttonTint="@color/white"
         android:checked="true"
         android:text="A-Z"
         android:textColor="@color/white"
+        app:buttonTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -192,10 +194,10 @@
         android:id="@+id/Number_checkBox"
         android:layout_width="98dp"
         android:layout_height="52dp"
-        android:buttonTint="@color/white"
         android:checked="true"
         android:text="0-9"
         android:textColor="@color/white"
+        app:buttonTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -207,10 +209,10 @@
         android:id="@+id/Symbol_checkBox"
         android:layout_width="98dp"
         android:layout_height="52dp"
-        android:buttonTint="@color/white"
         android:checked="true"
         android:text="%!@"
         android:textColor="@color/white"
+        app:buttonTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -1,7 +1,6 @@
 package com.example.freepass;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
@@ -22,36 +21,34 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firestore.v1.WriteResult;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-    //TODO: [HIGH PRIORITY] DON'T ALLOW REPEATED DATA
-    //TODO: [HIGH PRIORITY] AUTO FILL IF THE DATA IS SAVED
-    //TODO: [MEDIUM PRIORITY] LOGOUT
+    //TODO: [MEDIUM PRIORITY] CHANGE TEXT COLOR IN SIMPLE_LIST_1
     //TODO: [MEDIUM PRIORITY] CHANGE PASSWORD
 
 public class AccountMode extends AppCompatActivity {
@@ -59,17 +56,11 @@ public class AccountMode extends AppCompatActivity {
     FirebaseFirestore firebaseStore = FirebaseFirestore.getInstance();
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-    DocumentReference documentReference = firebaseStore.collection("user_data").document(userID);
-    private String[] savedWebstiteURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_mode);
-
-        documentReference.get().addOnCompleteListener(task -> {
-            
-        });
 
         //Hides the action bar (bar on top)
         Objects.requireNonNull(getSupportActionBar()).hide();
@@ -77,11 +68,24 @@ public class AccountMode extends AppCompatActivity {
         //Resets the workbench on startup
         saveWorkbench("");
 
+        List<String> savedWebsiteURL = new ArrayList<>();
+        CollectionReference collectionReference = firebaseStore.collection(userID);
+        collectionReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    savedWebsiteURL.add(document.getId());
+                }
+                Log.d("Saved website list", "Saved website list retrieved successfully: " + savedWebsiteURL.toString());
+            } else {
+                Log.d("Saved website list", "Error:: ", task.getException());
+            }
+        });
+
         ImageView settings_imageView = findViewById(R.id.Settings_imageView);
         ImageView info_imageView = findViewById(R.id.Info_imageView);
         ImageView home_imageView = findViewById(R.id.Home_imageView);
         TextView websiteURL_textView = findViewById((R.id.WebsiteURL_textView));
-        EditText websiteURL_editText = findViewById((R.id.WebsiteURL_editText));
+        AutoCompleteTextView websiteURL_editText = findViewById((R.id.WebsiteURL_editText));
         TextView username_textView = findViewById((R.id.Username_textView));
         EditText username_editText = findViewById((R.id.Username_editText));
         TextView masterPassword_textView = findViewById((R.id.MasterPassword_textView));
@@ -129,6 +133,16 @@ public class AccountMode extends AppCompatActivity {
         resetTextChange(length_editText);
         resetTextChange(counter_editText);
 
+        lowerCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
+        upperCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
+        number_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
+        symbol_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
+
+        //Dropdown menu for websiteURL
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, savedWebsiteURL);
+        websiteURL_editText.setAdapter(adapter);
+
         //Add workbench button
         //IMPORTANT: Workbench should always be trimmed for consistency's sake
         workbench_button.setOnClickListener(v -> {
@@ -144,6 +158,7 @@ public class AccountMode extends AppCompatActivity {
             builder.setPositiveButton("Add", (dialog, id) -> {
                 saveWorkbench(workbench_editText.getText().toString().trim());
                 Toast.makeText(getApplicationContext(), "Workbench added successfully", Toast.LENGTH_SHORT).show();
+                resetPasswordGeneration();
             });
 
             builder.setNegativeButton("Cancel", (dialog, id) -> {});
@@ -318,7 +333,7 @@ public class AccountMode extends AppCompatActivity {
 
     //Function resets all the editText fields and workbench, it also calls resetPasswordGeneration()
     private void reset() {
-        EditText websiteURL_editText = findViewById((R.id.WebsiteURL_editText));
+        AutoCompleteTextView websiteURL_editText = findViewById((R.id.WebsiteURL_editText));
         EditText username_editText = findViewById((R.id.Username_editText));
         EditText masterPassword_editText = findViewById((R.id.MasterPassword_editText));
 
@@ -354,7 +369,7 @@ public class AccountMode extends AppCompatActivity {
     }
 
     private void save() {
-        EditText websiteURL_editText = findViewById((R.id.WebsiteURL_editText));
+        AutoCompleteTextView websiteURL_editText = findViewById((R.id.WebsiteURL_editText));
         EditText username_editText = findViewById((R.id.Username_editText));
         CheckBox lowerCase_checkBox = findViewById(R.id.LowerCase_checkBox);
         CheckBox upperCase_checkBox = findViewById(R.id.UpperCase_checkBox);
@@ -373,7 +388,7 @@ public class AccountMode extends AppCompatActivity {
             workbench = "It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith, his chin nuzzled into his breast in an effort to escape the vile wind, slipped quickly through the glass doors of Victory Mansions, though not quickly enough to prevent a swirl of gritty dust from entering along with him. ".trim();
         Log.i("workbench", "Workbench: " + workbench);
 
-        CollectionReference collectionReference = firebaseStore.collection("user_data").document(userID).collection(websiteURL);
+        DocumentReference documentReference = firebaseStore.collection(userID).document(websiteURL);
 
         Map<String, Object> data = new HashMap<>();
         data.put("userID", userID);
@@ -385,20 +400,8 @@ public class AccountMode extends AppCompatActivity {
         data.put("symbol", symbol_checkBox.isChecked());
         data.put("length", length);
         data.put("counter", counter);
-        data.put("workbench", workbench);
 
-        /*documentReference.set(data).addOnCompleteListener(task -> {
-           if (task.isSuccessful()) {
-               Log.i("Save Successful", "Save Successful: user_data profile was created for user: " + userID);
-               Toast.makeText(getApplicationContext(), "Data saved successfully", Toast.LENGTH_SHORT).show();
-           } else {
-               Log.i("Save Error", "Error: " + Objects.requireNonNull(task.getException()).getMessage());
-               Toast.makeText(getApplicationContext(), "Error: " + Objects.requireNonNull(task.getException()).getMessage()
-                       , Toast.LENGTH_SHORT).show();
-           }
-        });*/
-
-        collectionReference.add(data).addOnCompleteListener(task -> {
+        documentReference.set(data).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.i("Save Successful", "Save Successful: user_data profile was created for user: " + userID);
                 Toast.makeText(getApplicationContext(), "Data saved successfully", Toast.LENGTH_SHORT).show();

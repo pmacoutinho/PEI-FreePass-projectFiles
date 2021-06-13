@@ -15,6 +15,6 @@
         android:textColorHint="#50ffffff"
         android:textColor="@color/white"
         android:backgroundTint="@color/white"
-        tools:ignore="HardcodedText"
-        android:inputType="textUri" />
+        android:inputType="textUri"
+        tools:ignore="HardcodedText" />
 </LinearLayout>

@@ -6,7 +6,6 @@ import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
-    //TODO: [HIGH PRIORITY] PASSWORDS TAKE WAY TO LONG TO GENERATE, THE PROBLEM IS IN THE genHASH() FUNCTION
     //TODO: [MEDIUM PRIORITY] QUANTITY OF CHAR
 
 public class PasswordGeneration {
@@ -52,7 +51,7 @@ public class PasswordGeneration {
         byte[] salt = (user + site).getBytes();
         String password = master + pepper;
 
-        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 100000, length * 7);
+        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 10000, length * 7);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 
         return factory.generateSecret(spec).getEncoded();

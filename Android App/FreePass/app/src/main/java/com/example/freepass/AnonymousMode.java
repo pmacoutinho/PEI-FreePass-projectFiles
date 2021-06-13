@@ -111,6 +111,11 @@ public class AnonymousMode extends AppCompatActivity {
         resetTextChange(length_editText);
         resetTextChange(counter_editText);
 
+        lowerCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
+        upperCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
+        number_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
+        symbol_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { resetPasswordGeneration(); });
+
         //Add workbench button
         workbench_button.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -123,6 +128,7 @@ public class AnonymousMode extends AppCompatActivity {
             builder.setPositiveButton("Add", (dialog, id) -> {
                 saveWorkbench(workbench_editText.getText().toString().trim());
                 Toast.makeText(getApplicationContext(), "Workbench added successfully", Toast.LENGTH_SHORT).show();
+                resetPasswordGeneration();
             });
 
             builder.setNegativeButton("Cancel", (dialog, id) -> {});
