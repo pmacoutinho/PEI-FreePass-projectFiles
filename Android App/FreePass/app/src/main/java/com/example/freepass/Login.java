@@ -40,6 +40,9 @@ public class Login extends AppCompatActivity {
         //Hides the action bar (bar on top)
         Objects.requireNonNull(getSupportActionBar()).hide();
 
+        //Log out user just in case they're signed in
+        firebaseAuth.signOut();
+
         ImageView home_imageView = findViewById(R.id.Home_imageView);
         TextView email_textView = findViewById((R.id.Email_textView));
         EditText email_editText = findViewById(R.id.Email_editText);
@@ -88,7 +91,7 @@ public class Login extends AppCompatActivity {
 
             //--- The next "if"'s are here and not in the color changes in order to prevent multiple Toasts showing at the same time
             if (email.isEmpty() || password.isEmpty())
-                Toast.makeText(getApplicationContext(), "Fill the required fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Fill the required fields", Toast.LENGTH_SHORT).show();
             else {
                 progressBar.setVisibility(View.VISIBLE);
                 //Changing progressBar color is different for pre-lollipop android versions
@@ -119,8 +122,12 @@ public class Login extends AppCompatActivity {
         ProgressBar progressBar = findViewById(R.id.progressBar);
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(this, "Welcome!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), AccountMode.class));
+                firebaseAuth.getCurrentUser().reload();
+                if (firebaseAuth.getCurrentUser().isEmailVerified()) {
+                    Toast.makeText(this, "Welcome!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(), AccountMode.class));
+                } else
+                    Toast.makeText(this, "Please verify your email first", Toast.LENGTH_SHORT).show();
             } else
                 Toast.makeText(this, "Error: " + Objects.requireNonNull(task.getException()).getMessage(),
                         Toast.LENGTH_SHORT).show();

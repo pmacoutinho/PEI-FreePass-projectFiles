@@ -23,10 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
-
-    //TODO: [LOW PRIORITY] SEND VERIFICATION EMAIL
 
 public class Register extends AppCompatActivity {
 
@@ -152,12 +151,20 @@ public class Register extends AppCompatActivity {
     private void createAccount(String email, String password) {
         ProgressBar progressBar = findViewById(R.id.progressBar);
 
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(getApplicationContext(), "User created successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), Login.class));
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task_createUser -> {
+            if (task_createUser.isSuccessful()) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                user.sendEmailVerification()
+                        .addOnCompleteListener(this, task_sendEmailVerification -> {
+                            if (task_sendEmailVerification.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "Check email to verify account", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), Login.class));
+                            } else
+                                Toast.makeText(getApplicationContext(),
+                                        "Error: " + Objects.requireNonNull(task_sendEmailVerification.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                        });
             } else
-                Toast.makeText(getApplicationContext(), "Error: " + Objects.requireNonNull(task.getException()).getMessage(),
+                Toast.makeText(getApplicationContext(), "Error: " + Objects.requireNonNull(task_createUser.getException()).getMessage(),
                         Toast.LENGTH_SHORT).show();
 
             progressBar.setVisibility(View.GONE);
