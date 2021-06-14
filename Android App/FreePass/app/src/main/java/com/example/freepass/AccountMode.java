@@ -3,6 +3,7 @@ package com.example.freepass;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
+import androidx.core.widget.CompoundButtonCompat;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -12,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -43,10 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-    //TODO: [MEDIUM PRIORITY] CHANGE TEXT COLOR IN SIMPLE_LIST_1
     //TODO: [MEDIUM PRIORITY] ENCRYPT WEBSITE_URL AND USERNAME
-    //TODO: [LOW PRIORITY] CHANGE CHECKBOX COLOR WHEN NONE OF THEM IS CHECKED AND WHEN THEY'RE CHECKED
-    //TODO: [LOW PRIORITY] MAYBE VERIFY IF LENGTH AND COUNTER ARE INVALID *BEFORE* PRESSING THE GENERATE BUTTON
 
 public class AccountMode extends AppCompatActivity {
 
@@ -139,10 +138,39 @@ public class AccountMode extends AppCompatActivity {
         resetTextChange(length_editText);
         resetTextChange(counter_editText);
 
-        lowerCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
-        upperCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
-        number_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
-        symbol_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> resetPasswordGeneration());
+        lowerCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> checkboxListener());
+        upperCase_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> checkboxListener());
+        number_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> checkboxListener());
+        symbol_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> checkboxListener());
+
+        length_editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!length_editText.getText().toString().equals(""))
+                    if (Integer.parseInt(length_editText.getText().toString()) < 8
+                            || Integer.parseInt(length_editText.getText().toString()) > 128)
+                        changeColorsAndText(length_editText, length_textView, "#f32c1e");
+                    else
+                        changeColorsAndText(length_editText, length_textView, "#ffffff");
+            }
+            //These function need to exist within TextWatcher()
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        });
+
+        counter_editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!counter_editText.getText().toString().equals(""))
+                    if (Integer.parseInt(counter_editText.getText().toString()) < 1)
+                        changeColorsAndText(counter_editText, counter_textView, "#f32c1e");
+                    else
+                        changeColorsAndText(counter_editText, counter_textView, "#ffffff");
+            }
+            //These function need to exist within TextWatcher()
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        });
 
         //Dropdown menu for websiteURL
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -231,15 +259,6 @@ public class AccountMode extends AppCompatActivity {
             else
                 changeColorsAndText(counter_editText, counter_textView, "#ffffffff");
 
-            /*
-            //Change checkboxes colors if they're not all checked
-            if (!lowerCase_checkBox.isChecked() && !upperCase_checkBox.isChecked() && !number_checkBox.isChecked()
-                    && !symbol_checkBox.isChecked()) {
-                upperCase_checkBox.setBackgroundColor(Color.parseColor("#f32c1e"));
-                number_checkBox.setBackgroundColor(Color.parseColor("#f32c1e"));
-                symbol_checkBox.setBackgroundColor(Color.parseColor("#f32c1e"));
-            }*/
-
             //If the required fields aren't filled the password is not generated
             if (websiteURL.isEmpty() || username.isEmpty() || masterPassword.isEmpty())
                 Toast.makeText(getApplicationContext(), "Fill the required fields", Toast.LENGTH_SHORT).show();
@@ -296,6 +315,28 @@ public class AccountMode extends AppCompatActivity {
         save_textView.setOnClickListener(v -> save());
     }
 
+    //All checkbox listeners call this function
+    private void checkboxListener() {
+        CheckBox lowerCase_checkBox = findViewById(R.id.LowerCase_checkBox);
+        CheckBox upperCase_checkBox = findViewById(R.id.UpperCase_checkBox);
+        CheckBox number_checkBox = findViewById(R.id.Number_checkBox);
+        CheckBox symbol_checkBox = findViewById(R.id.Symbol_checkBox);
+
+        resetPasswordGeneration();
+
+        if (!lowerCase_checkBox.isChecked() && !upperCase_checkBox.isChecked() && !number_checkBox.isChecked() && !symbol_checkBox.isChecked()) {
+            changeCheckboxColor(lowerCase_checkBox, "#f32c1e");
+            changeCheckboxColor(upperCase_checkBox, "#f32c1e");
+            changeCheckboxColor(number_checkBox, "#f32c1e");
+            changeCheckboxColor(symbol_checkBox, "#f32c1e");
+        } else {
+            changeCheckboxColor(lowerCase_checkBox, "#FFFFFF");
+            changeCheckboxColor(upperCase_checkBox, "#FFFFFF");
+            changeCheckboxColor(number_checkBox, "#FFFFFF");
+            changeCheckboxColor(symbol_checkBox, "#FFFFFF");
+        }
+    }
+
     //Function saves the workbench entered in the dialog window
     private void saveWorkbench(String workbench) {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("WORKBENCH", 0);
@@ -315,6 +356,15 @@ public class AccountMode extends AppCompatActivity {
         ViewCompat.setBackgroundTintList(et, ColorStateList.valueOf(Color.parseColor(color)));
         et.setTextColor(Color.parseColor(color));
         tv.setTextColor(Color.parseColor(color));
+    }
+
+    private void changeCheckboxColor(CheckBox cb, String color) {
+        if (Build.VERSION.SDK_INT < 21)
+            CompoundButtonCompat.setButtonTintList(cb, ColorStateList.valueOf(Color.parseColor(color)));
+        else
+            cb.setButtonTintList(ColorStateList.valueOf(Color.parseColor(color)));
+
+        cb.setTextColor(Color.parseColor(color));
     }
 
     //Calls the reset function when there's a change in the provided editText
@@ -380,7 +430,8 @@ public class AccountMode extends AppCompatActivity {
         ImageView save_imageView = findViewById(R.id.Save_imageView);
         TextView save_textView = findViewById(R.id.Save_textView);
 
-        genPassword_button.setText("GENERATE PASSWORD");
+        //R.string.generate_password_caps = GENERATE PASSWORD
+        genPassword_button.setText(this.getString(R.string.generate_password_caps));
         genPassword_button.setInputType(InputType.TYPE_NULL);
         copyClipboard_imageView.setVisibility(View.GONE);
         copyClipboard_textView.setVisibility(View.GONE);

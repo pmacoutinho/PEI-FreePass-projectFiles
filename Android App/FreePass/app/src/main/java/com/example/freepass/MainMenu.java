@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.Objects;
 
     //TODO: [LOW PRIORITY] MAKE APP COMPATIBLE WITH ALL SCREEN SIZES
-    //TODO: [LOW PRIORITY] FIX WARNINGS
 
 public class MainMenu extends AppCompatActivity {
 
