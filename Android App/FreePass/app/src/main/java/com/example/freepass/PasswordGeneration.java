@@ -51,7 +51,7 @@ public class PasswordGeneration {
         byte[] salt = (user + site).getBytes();
         String password = master + pepper;
 
-        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 10000, length * 7);
+        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 10000, length * 8);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 
         return factory.generateSecret(spec).getEncoded();
