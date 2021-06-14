@@ -5,9 +5,6 @@ import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
-    //TODO: [HIGH PRIORITY] PASSWORDS TAKE WAY TO LONG TO GENERATE, THE PROBLEM IS IN THE genHASH() FUNCTION
-    //TODO: [MEDIUM PRIORITY] QUANTITY OF CHAR
-
 public class PasswordGeneration {
 
     static String lowerCase = "abcdefghijklmnopqrstuvwxyz";
@@ -20,16 +17,18 @@ public class PasswordGeneration {
     private static int lastStringLength;
     private static int numberStrings;
     private static int tmp ; 
+    private static int newLength ; 
+
 
     public static String main(String site, String user, String master, int length, int count, String workbench,
                               boolean lowerCase_checked, boolean upperCase_checked, boolean number_checked, boolean symbol_checked, 
                               int minLowerCase_checked, int minUpperCase_checked, int minNumber_checked, int minSymbol_checked, boolean first_call)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         String alpha = "";
-        String res = null;
+        String res = "";
+        
         loop = false;
-        min_cnt = 0;
-
+        
         //The user can pick if he wants to include lowercase, uppercase, numbers and/or symbols
         if (lowerCase_checked)
             alpha += lowerCase;
@@ -41,55 +40,60 @@ public class PasswordGeneration {
             alpha += symbol;
         if (minLowerCase_checked != 0 || minUpperCase_checked != 0 || minNumber_checked != 0 || minSymbol_checked != 0){
             loop = true;
-            if (first_call){
-                numberStrings = length / 10;
-                lastStringLength = length % 10;
-                tmp = numberStrings;
+            if(first_call){
+                min_cnt = 0;
+                finalRes= "";
             }
-        }        
+        }       
+        
+        numberStrings = length / 10;
+        if( length < 10) numberStrings = length;
+        tmp = numberStrings;
+        newLength = minLowerCase_checked / numberStrings +  minUpperCase_checked / numberStrings +
+                         minNumber_checked / numberStrings + minSymbol_checked / numberStrings;
+        if( newLength == 0) newLength = 1;
+        lastStringLength =  length - newLength * tmp ;
+        System.out.println(numberStrings + "\t" + newLength + "\t" + lastStringLength);
 
         String pepper = genPepper(workbench, count); 
         byte[] hash = genHash(user, site, master, pepper, length);
         BigInteger value = new BigInteger(toHex(hash), 16);
         res = generate("", value , alpha,  length);
 
-        /*while (loop){
-            pepper = genPepper(workbench, count);
-            hash = genHash(user + min_cnt, site + min_cnt, master + min_cnt, pepper + min_cnt, length);
-            value = new BigInteger(toHex(hash), 16);
-            res = generate("", value , alpha,  length);
-            if(checkMin(res, minLowerCase_checked, minUpperCase_checked, minNumber_checked, minSymbol_checked))
-                break;
-            min_cnt += 1;
-        }*/
         while (loop){
             pepper = genPepper(workbench, count);
-            hash = genHash(user + min_cnt, site + min_cnt, master + min_cnt, pepper + min_cnt, length);
+            hash = genHash(user + min_cnt, site + min_cnt, master + min_cnt, pepper + min_cnt, newLength);
             value = new BigInteger(toHex(hash), 16);
-            res = generate("", value , alpha,  length);
-            if (checkMin(res, minLowerCase_checked / numberStrings, minUpperCase_checked / numberStrings,
-                    minNumber_checked / numberStrings, minSymbol_checked / numberStrings)){
+            res = generate("", value , alpha,  newLength);
+            if (checkMin(res, minLowerCase_checked /  numberStrings,
+                             minUpperCase_checked /  numberStrings,
+                            minNumber_checked / numberStrings, 
+                            minSymbol_checked / numberStrings)){
                 if ( tmp == 0){
-                    do{
+                    while(true){
+                        if( lastStringLength == 0) break;
                         pepper = genPepper(workbench, count);
                         hash = genHash(user + min_cnt, site + min_cnt, master + min_cnt, pepper + min_cnt, lastStringLength);
                         value = new BigInteger(toHex(hash), 16);
                         res = generate("", value , alpha,  lastStringLength);
-                    }while(checkMin(res, minLowerCase_checked % numberStrings, minUpperCase_checked % numberStrings,
-                             minNumber_checked % numberStrings, minSymbol_checked % numberStrings));
+                        min_cnt += 1;
+                        if(checkMin(res,minLowerCase_checked % numberStrings ,
+                                         minUpperCase_checked % numberStrings ,
+                                         minNumber_checked % numberStrings ,
+                                         minSymbol_checked % numberStrings )){
+                                            finalRes += res;
+                                            break;
+                                         } 
+                    }
                     res = finalRes;
                     break;
                 }
                 tmp --;
-                main( site,  user,  master,  10 ,  count,  workbench,
-                        lowerCase_checked,  upperCase_checked,  number_checked,  symbol_checked, 
-                        minLowerCase_checked / numberStrings,  minUpperCase_checked / numberStrings,
-                        minNumber_checked / numberStrings,  minSymbol_checked / numberStrings, false);
+                finalRes += res;
             }
             min_cnt += 1;
         }
-
-
+        
         return res;
     }
 
@@ -111,15 +115,7 @@ public class PasswordGeneration {
         if(!loop)
             spec = new PBEKeySpec(password.toCharArray(), salt, 10000, length * 8);
         else 
-            /*if( length <= 30)
-                spec = new PBEKeySpec(password.toCharArray(), salt, 1000, length * 7);
-            else if( length <= 60)
-                spec = new PBEKeySpec(password.toCharArray(), salt, 500, length * 7);
-            else if( length <= 90)
-                spec = new PBEKeySpec(password.toCharArray(), salt, 250, length * 7);
-            else 
-                spec = new PBEKeySpec(password.toCharArray(), salt, 100, length * 7);*/
-            spec = new PBEKeySpec(password.toCharArray(), salt, 1000, length * 8);
+            spec = new PBEKeySpec(password.toCharArray(), salt, 100, length * 8);
             
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 
@@ -139,7 +135,7 @@ public class PasswordGeneration {
         return generate(res, quo, alpha, max);
     }
 
-    private static boolean checkMin(String res, int minLowerCase_checked, int minUpperCase_checked, int minNumber_checked, int minSymbol_checked){
+    public static boolean checkMin(String res, int minLowerCase_checked, int minUpperCase_checked, int minNumber_checked, int minSymbol_checked){
         int upper = 0, lower = 0, number = 0, special = 0;
         for(int i = 0; i < res.length(); i++){
             char ch = res.charAt(i);
@@ -152,10 +148,11 @@ public class PasswordGeneration {
             else
                 special++;
         }
-        if(upper >= minUpperCase_checked && lower >= minLowerCase_checked && number >= minNumber_checked && special >= minSymbol_checked){
-            finalRes += res;
-            return true;
-        }
+        if(upper >= minUpperCase_checked)
+            if(lower >= minLowerCase_checked)
+                if(number >= minNumber_checked)
+                    if(special >= minSymbol_checked)
+                        return true;
         return false;
     }
 }
