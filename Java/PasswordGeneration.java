@@ -46,14 +46,13 @@ public class PasswordGeneration {
             }
         }       
         
-        numberStrings = length / 10;
-        if( length < 10) numberStrings = length;
+        numberStrings = length / 20;
+        if( length < 20) numberStrings = 1;
         tmp = numberStrings;
         newLength = minLowerCase_checked / numberStrings +  minUpperCase_checked / numberStrings +
                          minNumber_checked / numberStrings + minSymbol_checked / numberStrings;
-        if( newLength == 0) newLength = 1;
         lastStringLength =  length - newLength * tmp ;
-        System.out.println(numberStrings + "\t" + newLength + "\t" + lastStringLength);
+        //System.out.println(numberStrings + "\t" + newLength + "\t" + lastStringLength);
 
         String pepper = genPepper(workbench, count); 
         byte[] hash = genHash(user, site, master, pepper, length);
