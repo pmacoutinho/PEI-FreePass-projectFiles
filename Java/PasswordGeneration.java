@@ -65,10 +65,8 @@ public class PasswordGeneration {
             hash = genHash(user + min_cnt, site + min_cnt, master + min_cnt, pepper + min_cnt, newLength);
             value = new BigInteger(toHex(hash), 16);
             res = generate("", value , alpha,  newLength);
-            if (checkMin(res, minLowerCase_checked /  numberStrings,
-                             minUpperCase_checked /  numberStrings,
-                            minNumber_checked / numberStrings, 
-                            minSymbol_checked / numberStrings)){
+            if (checkMin(res, minLowerCase_checked /  numberStrings, minUpperCase_checked /  numberStrings,
+                            minNumber_checked / numberStrings, minSymbol_checked / numberStrings)){
                 if ( tmp == 0){
                     while(true){
                         if( lastStringLength == 0) break;
@@ -77,10 +75,8 @@ public class PasswordGeneration {
                         value = new BigInteger(toHex(hash), 16);
                         res = generate("", value , alpha,  lastStringLength);
                         min_cnt += 1;
-                        if(checkMin(res,minLowerCase_checked % numberStrings ,
-                                         minUpperCase_checked % numberStrings ,
-                                         minNumber_checked % numberStrings ,
-                                         minSymbol_checked % numberStrings )){
+                        if(checkMin(res,minLowerCase_checked % numberStrings , minUpperCase_checked % numberStrings ,
+                                         minNumber_checked % numberStrings , minSymbol_checked % numberStrings )){
                                             finalRes += res;
                                             break;
                                          } 

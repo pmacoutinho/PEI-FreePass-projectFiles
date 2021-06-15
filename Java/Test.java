@@ -6,9 +6,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 public class Test{
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException{
-        String s = PasswordGeneration.main("google", "tone", "tone2000", 128, 1, "String workbench",
+        String s = PasswordGeneration.main("google", "tone", "tone2000", 68, 1, "String workbench",
         true, true, true, true, 
-        40,42, 30, 16, true);
+        20,32, 6, 10, true);
         System.out.println( s.length() );
         int upper = 0, lower = 0, number = 0, special = 0;
         for(int i = 0; i < s.length(); i++){
