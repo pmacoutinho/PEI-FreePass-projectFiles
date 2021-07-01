@@ -69,4 +69,5 @@ public class PasswordGeneration {
 
         return generate(res, quo, alpha, max);
     }
+
 }

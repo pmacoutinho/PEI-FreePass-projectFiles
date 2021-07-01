@@ -22,6 +22,8 @@ import java.util.Objects;
 
 public class Settings extends AppCompatActivity {
 
+    //TODO: [HIGH PRIORITY] DELETE ACCOUNT
+
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override
@@ -38,6 +40,8 @@ public class Settings extends AppCompatActivity {
         CheckBox symbol_checkBox = findViewById(R.id.Symbol_checkBox);
         EditText length_editText = findViewById(R.id.Length_editText);
         EditText counter_editText = findViewById(R.id.Counter_editText);
+        EditText minNumbers_editText = findViewById(R.id.MinNumbers_editText);
+        EditText minSymbols_editText = findViewById(R.id.MinSymbols_editText);
         Button save_button = findViewById(R.id.Save_button);
         TextView loggedInAs_textView = findViewById(R.id.LoggedInAs_textView);
         Button logout_button = findViewById(R.id.Logout_button);
@@ -54,6 +58,8 @@ public class Settings extends AppCompatActivity {
         symbol_checkBox.setChecked(sharedPreferences.getBoolean("symbol_default", true));
         length_editText.setText(sharedPreferences.getString("length_default", "16"));
         counter_editText.setText(sharedPreferences.getString("counter_default", "1"));
+        counter_editText.setText(sharedPreferences.getString("min_number", "2"));
+        counter_editText.setText(sharedPreferences.getString("min_symbol", "2"));
 
         //Hides the action bar (bar on top)
         Objects.requireNonNull(getSupportActionBar()).hide();
@@ -98,6 +104,8 @@ public class Settings extends AppCompatActivity {
             editor.putBoolean("symbol_default", symbol_checkBox.isChecked());
             editor.putString("length_default", length_editText.getText().toString());
             editor.putString("counter_default", counter_editText.getText().toString());
+            editor.putString("min_number", minNumbers_editText.getText().toString());
+            editor.putString("min_symbol", minSymbols_editText.getText().toString());
             editor.apply();
             Toast.makeText(this, "Defaults saved", Toast.LENGTH_SHORT).show();
         });

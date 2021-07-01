@@ -9,6 +9,37 @@
     android:background="#36393f">
 
     <TextView
+        android:id="@+id/MinSymbols_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/min_symbols"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.357"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.018" />
+
+    <EditText
+        android:id="@+id/MinNumbers_editText"
+        android:layout_width="75dp"
+        android:layout_height="47dp"
+        android:autofillHints="length"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:inputType="number"
+        android:text="@string/two"
+        android:textColor="@color/white"
+        app:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/MinNumbers_textView"
+        app:layout_constraintTop_toBottomOf="@+id/MinNumbers_textView"
+        app:layout_constraintVertical_bias="0.004" />
+
+    <TextView
         android:id="@+id/Settings_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -219,6 +250,65 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/advanced_options"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Length_editText"
+        app:layout_constraintTop_toBottomOf="@+id/Length_editText"
+        app:layout_constraintVertical_bias="0.042" />
+
+    <TextView
+        android:id="@+id/MinNumbers_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/min_numbers"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.018" />
+
+    <EditText
+        android:id="@+id/MinSymbols_editText"
+        android:layout_width="75dp"
+        android:layout_height="47dp"
+        android:autofillHints="length"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:inputType="number"
+        android:text="@string/two"
+        android:textColor="@color/white"
+        app:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/MinSymbols_textView"
+        app:layout_constraintTop_toBottomOf="@+id/MinSymbols_textView"
+        app:layout_constraintVertical_bias="0.004" />
+
+    <Button
+        android:id="@+id/Save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="@string/save"
+        android:textColor="@android:color/black"
+        app:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/MinNumbers_editText"
+        app:layout_constraintTop_toBottomOf="@+id/MinNumbers_editText"
+        app:layout_constraintVertical_bias="0.068" />
+
+    <TextView
         android:id="@+id/Account_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -230,7 +320,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/Save_button"
         app:layout_constraintTop_toBottomOf="@+id/Save_button"
-        app:layout_constraintVertical_bias="0.092" />
+        app:layout_constraintVertical_bias="0.075" />
 
     <TextView
         android:id="@+id/LoggedInAs_textView"
@@ -320,19 +410,5 @@
         app:layout_constraintStart_toStartOf="@+id/NotLogged_textView"
         app:layout_constraintTop_toTopOf="@+id/Login_button"
         app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/Save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:text="@string/save"
-        android:textColor="@android:color/black"
-        app:backgroundTint="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/Length_editText"
-        app:layout_constraintTop_toBottomOf="@+id/Length_editText"
-        app:layout_constraintVertical_bias="0.066" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

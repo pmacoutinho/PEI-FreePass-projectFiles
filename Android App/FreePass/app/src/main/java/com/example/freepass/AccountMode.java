@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.CompoundButtonCompat;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -37,6 +38,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
@@ -45,7 +49,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-    //TODO: [MEDIUM PRIORITY] ENCRYPT WEBSITE_URL AND USERNAME
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 public class AccountMode extends AppCompatActivity {
 
@@ -63,17 +72,6 @@ public class AccountMode extends AppCompatActivity {
 
         //Resets the workbench on startup
         saveWorkbench("");
-
-        List<String> savedWebsiteURL = new ArrayList<>();
-        CollectionReference collectionReference = firebaseStore.collection(userID);
-        collectionReference.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult()))
-                    savedWebsiteURL.add(document.getId());
-                Log.d("Saved website list", "Saved website list retrieved successfully: " + savedWebsiteURL.toString());
-            } else
-                Log.d("Saved website list", "Error: ", task.getException());
-        });
 
         ImageView settings_imageView = findViewById(R.id.Settings_imageView);
         ImageView info_imageView = findViewById(R.id.Info_imageView);
@@ -172,6 +170,25 @@ public class AccountMode extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
         });
 
+        //Get saved websiteURL's
+        List<String> savedWebsiteURL = new ArrayList<>();
+        CollectionReference collectionReference = firebaseStore.collection(userID);
+        collectionReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                    //The website url is encrypted in the DB, you have to decrypt it
+                    try { savedWebsiteURL.add(decrypt(document.getId())); }
+                    catch (NoSuchPaddingException e) { e.printStackTrace(); }
+                    catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
+                    catch (InvalidKeyException e) { e.printStackTrace(); }
+                    catch (BadPaddingException e) { e.printStackTrace(); }
+                    catch (IllegalBlockSizeException e) { e.printStackTrace(); }
+                }
+                Log.d("Saved website list", "Saved website list retrieved successfully: " + savedWebsiteURL.toString());
+            } else
+                Log.d("Saved website list", "Error: ", task.getException());
+        });
+
         //Dropdown menu for websiteURL
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, savedWebsiteURL);
@@ -179,7 +196,17 @@ public class AccountMode extends AppCompatActivity {
 
         //Fill fields if user clicks on the websiteURL_editText suggestion
         websiteURL_editText.setOnItemClickListener((p, v, pos, id) -> {
-            DocumentReference documentReference = firebaseStore.collection(userID).document(p.getItemAtPosition(pos).toString());
+            DocumentReference documentReference = null;
+
+            //You have to encrypt the website url to get it from the DB
+            try {
+                documentReference = firebaseStore.collection(userID).document(encrypt(p.getItemAtPosition(pos).toString().getBytes())); }
+            catch (InvalidKeyException e) { e.printStackTrace(); }
+            catch (NoSuchPaddingException e) { e.printStackTrace(); }
+            catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
+            catch (BadPaddingException e) { e.printStackTrace(); }
+            catch (IllegalBlockSizeException e) { e.printStackTrace(); }
+
             documentReference.addSnapshotListener(this, (documentSnapshot, error) -> {
                 assert documentSnapshot != null;
                 username_editText.setText(documentSnapshot.getString("username"));
@@ -311,8 +338,26 @@ public class AccountMode extends AppCompatActivity {
         reset_imageView.setOnClickListener(v -> reset());
         reset_textView.setOnClickListener(v -> reset());
 
-        save_imageView.setOnClickListener(v -> save());
-        save_textView.setOnClickListener(v -> save());
+        //Save credentials button
+        save_imageView.setOnClickListener(v -> {
+            try {
+                save();
+            } catch (NoSuchAlgorithmException e) { e.printStackTrace();
+            } catch (BadPaddingException e) { e.printStackTrace();
+            } catch (NoSuchPaddingException e) { e.printStackTrace();
+            } catch (IllegalBlockSizeException e) { e.printStackTrace();
+            } catch (InvalidKeyException e) { e.printStackTrace(); }
+        });
+
+        save_textView.setOnClickListener(v -> {
+            try {
+                save();
+            } catch (NoSuchAlgorithmException e) { e.printStackTrace();
+            } catch (BadPaddingException e) { e.printStackTrace();
+            } catch (NoSuchPaddingException e) { e.printStackTrace();
+            } catch (IllegalBlockSizeException e) { e.printStackTrace();
+            } catch (InvalidKeyException e) { e.printStackTrace(); }
+        });
     }
 
     //All checkbox listeners call this function
@@ -443,7 +488,7 @@ public class AccountMode extends AppCompatActivity {
         save_textView.setVisibility(View.GONE);
     }
 
-    private void save() {
+    private void save() throws NoSuchAlgorithmException, BadPaddingException, NoSuchPaddingException, IllegalBlockSizeException, InvalidKeyException {
         AutoCompleteTextView websiteURL_editText = findViewById((R.id.WebsiteURL_editText));
         EditText username_editText = findViewById((R.id.Username_editText));
         CheckBox lowerCase_checkBox = findViewById(R.id.LowerCase_checkBox);
@@ -458,17 +503,12 @@ public class AccountMode extends AppCompatActivity {
         String length = length_editText.getText().toString().trim();
         String counter = counter_editText.getText().toString().trim();
 
-        String workbench = getApplicationContext().getSharedPreferences("WORKBENCH", 0).getString("Workbench", null);
-        if (workbench.matches("")) //If the user didn't define a workbench, a trimmed version of the first paragraph of 1984 by George Orwell is used
-            workbench = "It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith, his chin nuzzled into his breast in an effort to escape the vile wind, slipped quickly through the glass doors of Victory Mansions, though not quickly enough to prevent a swirl of gritty dust from entering along with him. ".trim();
-        Log.i("workbench", "Workbench: " + workbench);
-
-        DocumentReference documentReference = firebaseStore.collection(userID).document(websiteURL);
+        DocumentReference documentReference = firebaseStore.collection(userID).document(encrypt(websiteURL.getBytes()));
+        String encryptedUsername = encrypt(username.getBytes());
 
         Map<String, Object> data = new HashMap<>();
         data.put("userID", userID);
-        data.put("websiteURL", websiteURL);
-        data.put("username", username);
+        data.put("username", encryptedUsername);
         data.put("lowercase", lowerCase_checkBox.isChecked());
         data.put("uppercase", upperCase_checkBox.isChecked());
         data.put("number", number_checkBox.isChecked());
@@ -486,6 +526,38 @@ public class AccountMode extends AppCompatActivity {
                         , Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    private static String encrypt(byte[] plainText)
+            throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException {
+        byte[] keyBytes = "thisisa128bitkey".getBytes();
+
+        @SuppressLint("GetInstance")
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        SecretKey secretKey = new SecretKeySpec(keyBytes, "AES");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+        //return  Base64.getEncoder().encodeToString(cipher.doFinal(plainText));
+        return android.util.Base64.encodeToString(cipher.doFinal(plainText), android.util.Base64.DEFAULT);
+    }
+
+    private static String decrypt(String cipherTextString)
+            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        byte[] keyBytes = "thisisa128bitkey".getBytes();
+        byte[] cipherText = android.util.Base64.decode(cipherTextString, android.util.Base64.DEFAULT);
+
+        @SuppressLint("GetInstance")
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        SecretKey secretKey = new SecretKeySpec(keyBytes, "AES");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+        // ignore "StandardCharsets.UTF_8 can be used instead" warning, StandardCharsets.UTF_8 is not compatible with API < 19
+        //return new String(cipher.doFinal(cipherText), Charset.forName("UTF-8"));
+        return new String(cipher.doFinal(cipherText), Charset.forName("UTF-8"));
+    }
+
+    private static String toHex(byte[] bytes) {
+        BigInteger bi = new BigInteger(1, bytes);
+        return String.format("%0" + (bytes.length << 1) + "x", bi);
     }
 }

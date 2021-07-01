@@ -69,6 +69,10 @@
     <!-- SETTINGS -->
     <string name="default_username">Default Username</string>
     <string name="default_options">Default Options</string>
+    <string name="advanced_options">Advanced Options</string>
+    <string name="min_numbers">Min. Numbers</string>
+    <string name="two">2</string>
+    <string name="min_symbols">Min. Symbols</string>
     <string name="account">Account</string>
     <string name="logged_in_as">Logged in as: </string>
     <string name="logout">Logout</string>
