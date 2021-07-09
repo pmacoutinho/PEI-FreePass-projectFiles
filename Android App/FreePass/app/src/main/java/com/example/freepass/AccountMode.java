@@ -209,7 +209,19 @@ public class AccountMode extends AppCompatActivity {
 
             documentReference.addSnapshotListener(this, (documentSnapshot, error) -> {
                 assert documentSnapshot != null;
-                username_editText.setText(documentSnapshot.getString("username"));
+                try {
+                    username_editText.setText(decrypt(documentSnapshot.getString("username")));
+                } catch (NoSuchPaddingException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                } catch (BadPaddingException e) {
+                    e.printStackTrace();
+                } catch (IllegalBlockSizeException e) {
+                    e.printStackTrace();
+                }
                 lowerCase_checkBox.setChecked(Objects.requireNonNull(documentSnapshot.getBoolean("lowercase")).equals(true));
                 upperCase_checkBox.setChecked(Objects.requireNonNull(documentSnapshot.getBoolean("uppercase")).equals(true));
                 number_checkBox.setChecked(Objects.requireNonNull(documentSnapshot.getBoolean("number")).equals(true));
